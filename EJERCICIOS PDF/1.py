@@ -5,7 +5,7 @@
 
 
 class Cuenta():
-    def __init__(ingreso,reintegro,transferencia):
+    def __init__(self,ingreso,reintegro,transferencia):
         self.ingreso = ingreso
         self.reintegro = reintegro
         self.transferencia = transferencia
