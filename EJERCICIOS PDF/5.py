@@ -4,49 +4,76 @@
 #5. Crea una clase Complejo con métodos para sumar, restar, multiplicar y dividir números
 #complejos.
 
-class Complejo():
-    def __init__(self,n,ni,n2,ni2):
-        self.n = n
-        self.ni = ni
-        self.n2 = n2
-        self.ni2 = ni2
+#!/usr/bin/env python3
 
-    def sumar(self):
-        return (self.n+self.n2,"+",self.ni+self.ni2,"i")
+import unittest
 
-    def restar(self):
-        return (self.n+self.n2,"+",self.ni+self.ni2,"i")
+class Complejo(object):
+    def __init__(self, real, imag=0):
+        self.real = real
+        self.imag = imag
 
-    def multiplicar(self):
-        real1 = self.n*self.n2
-        real2 =-self.ni*self.ni2
-        imag1= self.ni*self.n2
-        imag2= self.n*self.ni2
-        return (real1 + real2),"+",(imag1 + imag2),"i"
+    def sumar(self, otro):
+        result = Complejo(self.real + otro.real,
+                            self.imag + otro.imag)
+        return result
 
-    def dividir(self):
-        real1 = self.n*self.n2
-        real2 =-self.ni*self.ni2
-        imag1= self.ni*self.n2
-        imag2= self.n*self.ni2
-        numerador_real = real2 + real2
-        numerador_imag = imag1 + imag2
+    def restar(self, otro):
+        result = Complejo(self.real - otro.real,
+                            self.imag - otro.imag)
+        return result
 
-        denom=self.n2**2 + self.ni2**2
+    def multiplicar(self, otro):
+        result = Complejo(self.real*otro.real - self.imag*otro.imag, self.real*otro.imag + self.imag*otro.real)
+        return result
 
-        return (numerador_real,"+",numerador_imag,"/",denom)
+    def dividir(self, otro):
+        result = Complejo((self.real*otro.real + self.imag*otro.imag)/(otro.real**2+otro.imag**2), (self.imag*otro.real-self.real*otro.imag)/(otro.real**2+otro.imag**2))
+        return result
+
+    def igual(self, otro):
+        return self.real == otro.real and self.imag == otro.imag
 
 
-o = Complejo(2,3,-4,8)
-suma = o.sumar()
-resta = o.restar()
-mult = o.multiplicar()
-div = o.dividir()
+class TestComplejo(unittest.TestCase):
 
-print("La suma de los complejos es:",suma)
-print("Y la resta:",resta)
-print("Y la multiplicacion:",mult)
-print("Y la division:",div)
+    def test_sumar(self):
 
+        c1 = Complejo(1,2)
+        c2 = Complejo(3,4)
 
-#hola
+        suma = c1.sumar(c2)
+
+        self.assertEqual(suma.real, 4)
+        self.assertEqual(suma.imag, 6)
+
+    def test_restar(self):
+
+        c1 = Complejo(6,1)
+        c2 = Complejo(8,4)
+
+        restar = c1.restar(c2)
+
+        self.assertEqual(restar.real, -2)
+        self.assertEqual(restar.imag, -3)
+
+    def test_multiplicar(self):
+        c1 = Complejo(1,2)
+        c2 = Complejo(3,4)
+
+        multiplicacion = c1.multiplicar(c2)
+
+        self.assertEqual(multiplicacion.real, -5)
+        self.assertEqual(multiplicacion.imag, 10)
+
+    def test_dividir(self):
+        c1 = Complejo(1,1)
+        c2 = Complejo(1,1)
+
+        division = c1.dividir(c2)
+
+        self.assertEqual(division.real, 1)
+        self.assertEqual(division.imag, 0)
+
+if __name__ == "__main__":
+    unittest.main()
